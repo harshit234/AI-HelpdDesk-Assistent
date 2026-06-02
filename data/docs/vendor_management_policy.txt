@@ -1,0 +1,50 @@
+Vendor and Third-Party Management Policy
+Document ID: POL-VND-011
+Version: 1.1
+Last Updated: 2024-06-30
+Owner: IT Operations – Rajesh Nair
+
+PURPOSE
+Governs how the IT team engages with external vendors, manages vendor-related incidents, and ensures accountability for third-party service levels.
+
+KEY VENDORS AND CONTACTS
+
+Airtel (ISP – Ahmedabad HQ)
+Service: 1Gbps leased line, circuit ID AIRT-GJ-009821
+SLA: 99.9% uptime, resolution within 4 hours for complete outage
+NOC: 1800-XXX-XXXX (24x7)
+Account Manager: Suresh Pillai, suresh.pillai@airtel.example
+
+Tata Communications (MPLS – Mumbai co-lo link)
+Service: 100Mbps MPLS link, circuit ID TATA-MH-007413
+SLA: 99.95% uptime, resolution within 6 hours
+NOC: 1800-YYY-YYYY (24x7)
+Account Manager: Meera Krishnan, meera.k@tata.example
+
+AWS (Cloud Infrastructure)
+Services: EC2, S3, RDS (non-primary use), Route 53
+Support tier: Business Support (response within 1 hour for production impacting)
+Support portal: console.aws.amazon.com/support
+Internal AWS account owner: Vikram Iyer
+
+Cisco SmartNet (Network Hardware Maintenance)
+Covers: Core switch SW-CORE-01, edge router, Cisco ASA (VPN gateway)
+Contract number: CISCO-SMN-2024-1188
+Expiry: 2025-09-30 (renewal owner: Deepak Rao)
+TAC: 1800-553-2447
+
+HDFC Cyber Insurance
+Policy number: HDFC-CYB-20241100
+Coverage: Ransomware, data breach, business interruption up to Rs. 2 crore
+Claim contact: Nandita Kulkarni (only authorised person to initiate claims)
+Insurer contact: cyberteam@hdfcergo.example
+
+VENDOR INCIDENT PROCESS
+1. When a vendor outage is suspected, verify the issue is on the vendor's side before calling (check their status page if available).
+2. Open a ticket in the helpdesk under the relevant vendor category with the circuit ID or contract number in the subject.
+3. Call the vendor NOC and get a reference/case number. Add this to the ticket.
+4. Update the ticket every 30 minutes with the vendor's status update.
+5. If the vendor breaches their own SLA, document it. Rajesh Nair reviews vendor SLA breaches quarterly for contract renegotiation leverage.
+
+THIRD-PARTY ACCESS
+Any vendor requiring remote access to our systems must be given a time-limited contractor account (see POL-ACC-008) and must connect only via our monitored VPN. Vendor access sessions must be observed by an internal engineer. Unaccompanied vendor access is not permitted.

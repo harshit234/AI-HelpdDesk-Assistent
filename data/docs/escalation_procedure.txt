@@ -1,0 +1,42 @@
+Escalation Procedure – IT Helpdesk
+Document ID: POL-ESC-002
+Version: 1.8
+Last Updated: 2024-10-01
+Owner: Helpdesk Manager: Priya Sharma
+
+PURPOSE
+This procedure defines when and how to escalate tickets that are at risk of SLA breach, involve multiple teams, or require management visibility.
+
+ESCALATION TIERS
+
+Tier 1 – L1 Support (First Contact)
+Team: Helpdesk Analysts (Karan Mehta, Sneha Joshi, Akash Patel)
+Handles: Password resets, basic hardware faults, standard software installations, account unlocks, VPN connectivity for standard users.
+Escalate to Tier 2 when: Issue cannot be resolved within 30 minutes, issue requires admin-level access, or the user is a C-level executive.
+
+Tier 2 – L2 Support (Technical Support)
+Team: Systems Engineers (Deepak Rao, Fatima Sheikh)
+Handles: Server-side issues, network faults, application errors, database connectivity, firewall rules.
+Escalate to Tier 3 when: Root cause is unknown after 2 hours of investigation, the issue involves data loss, or production systems are impacted.
+
+Tier 3 – L3 Support (Expert / Vendor)
+Team: Platform Engineers (Vikram Iyer, Nandita Kulkarni) and external vendor contacts.
+Handles: Infrastructure failures, cloud platform issues, critical security incidents, and any issue requiring vendor engagement.
+Escalate to IT Head (Rajesh Nair) when: P1 SLA is at risk, a data breach is confirmed or suspected, or a fix requires budget approval above Rs. 50,000.
+
+ESCALATION STEPS
+1. Update the ticket with a clear summary of steps already taken and the reason for escalation.
+2. Change the assigned group in the ticketing system to the target tier group.
+3. Send a direct message (not just an email) to the receiving engineer to ensure awareness.
+4. For P1 escalations, also call the on-call number: +91-98XXXXXXXX (internal directory: ext. 1100).
+5. Notify the affected user's manager if downtime exceeds 1 hour.
+
+MANAGEMENT ESCALATION MATRIX
+Duration Unresolved | Action Required
+> 2 hours (P1)      | Notify IT Head by phone
+> 4 hours (P2)      | Notify Helpdesk Manager (Priya Sharma)
+> 24 hours (P3)     | Notify Team Lead and log in weekly report
+> 3 business days (P4) | Review in weekly triage; notify requester
+
+DO NOT SKIP TIERS
+Engineers must not bypass Tier 2 and go directly to Tier 3 without documented justification. Skipping tiers delays resolution and prevents proper knowledge capture.

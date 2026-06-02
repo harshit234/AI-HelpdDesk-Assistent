@@ -1,0 +1,51 @@
+Server Health Monitoring Policy
+Document ID: POL-MON-007
+Version: 1.2
+Last Updated: 2024-07-15
+Owner: Platform Engineering – Vikram Iyer
+
+PURPOSE
+Defines alerting thresholds, on-call responsibilities, and response expectations for server health monitoring across the production and staging environments.
+
+MONITORING STACK
+Primary tool: Grafana + Prometheus (http://monitor.internal)
+Log aggregation: Loki (integrated with Grafana)
+Uptime checks: Prometheus Blackbox Exporter (checks every 30 seconds)
+Alert routing: Alertmanager → PagerDuty → On-call engineer
+
+ALERT THRESHOLDS
+
+CPU Usage
+Warning: > 80% sustained for 5 minutes → Slack notification to #ops-alerts channel.
+Critical: > 95% sustained for 2 minutes → PagerDuty alert, wakes on-call engineer.
+Action: Check for runaway processes. If no clear cause, escalate to Tier 3.
+
+Memory Usage
+Warning: > 85% for 10 minutes → Slack notification.
+Critical: > 95% for 5 minutes → PagerDuty alert.
+Action: Identify top memory consumers. If a known application, notify its owner. Do not restart without confirming no active transactions.
+
+Disk Usage
+Warning: > 75% on any volume → Slack notification.
+Critical: > 90% → PagerDuty alert. Immediate action required.
+Action: Identify largest directories. Archive or delete safe candidates only. Binary logs and database files require DBA (Vikram Iyer) approval before deletion.
+
+Service Uptime
+Any monitored service down for > 60 seconds → PagerDuty P1 alert.
+Monitored services: nginx on web-01/web-02, mysql on prod-mysql-01, postgres on prod-postgres-02, app on app-01 through app-04.
+
+Network Latency
+Warning: > 50ms average RTT to core switch → Slack notification.
+Critical: > 150ms or packet loss > 1% → PagerDuty alert. Escalate to Deepak Rao.
+
+ON-CALL ROTATION
+On-call runs Monday to Monday, rotating weekly.
+Current schedule (Q1 2025):
+Week 1 (Jan 6): Karan Mehta
+Week 2 (Jan 13): Deepak Rao
+Week 3 (Jan 20): Vikram Iyer
+Week 4 (Jan 27): Akash Patel
+On-call engineers must acknowledge PagerDuty alerts within 5 minutes. Non-acknowledgement triggers escalation to the backup on-call (always Vikram Iyer).
+
+MAINTENANCE MODE
+Before planned maintenance, suppress alerts using the Alertmanager silence feature. Silence must be created at least 30 minutes before the window and removed within 30 minutes of completion. Leaving silences active after maintenance is a policy violation.

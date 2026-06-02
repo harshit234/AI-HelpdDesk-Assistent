@@ -1,0 +1,44 @@
+Service Level Agreement Policy
+Document ID: POL-SLA-001
+Version: 2.3
+Last Updated: 2024-11-15
+Owner: IT Operations, Head: Rajesh Nair
+
+OVERVIEW
+This document defines the response and resolution time commitments for all IT support tickets raised through the internal helpdesk system. All SLA timers begin the moment a ticket is acknowledged by the system, not when it is assigned to an engineer.
+
+PRIORITY DEFINITIONS AND TIMELINES
+
+Priority 1 – Critical
+Definition: Complete outage of a business-critical system affecting 50 or more users, or any incident impacting revenue directly (e.g. payment gateway, customer portal, ERP system).
+First Response Time: 15 minutes
+Resolution Target: 4 hours
+Escalation Trigger: If unresolved after 2 hours, ticket must be escalated to Tier 3 and the IT Head must be notified by phone.
+On-call Coverage: 24x7, including weekends and public holidays.
+
+Priority 2 – High
+Definition: Partial outage or degraded performance of a business-critical system, or full outage of a non-critical system affecting more than 10 users.
+First Response Time: 1 hour
+Resolution Target: 8 hours
+Escalation Trigger: If unresolved after 4 hours, escalate to Tier 2 lead.
+On-call Coverage: Business hours (9:00 AM to 9:00 PM IST), Monday to Saturday.
+
+Priority 3 – Medium
+Definition: Single-user issues with workarounds available, non-urgent software requests, or performance issues not affecting productivity significantly.
+First Response Time: 4 hours
+Resolution Target: 48 hours
+Escalation Trigger: If unresolved after 24 hours, notify the assigned team lead.
+On-call Coverage: Business hours only.
+
+Priority 4 – Low
+Definition: General queries, how-to requests, cosmetic issues, or requests with no business impact.
+First Response Time: 8 hours
+Resolution Target: 5 business days
+Escalation Trigger: None automatic; reviewed in weekly triage.
+On-call Coverage: Business hours only.
+
+SLA BREACH POLICY
+Any breach of a P1 or P2 SLA must be documented in the Post-Incident Report (PIR) within 24 hours of resolution. Repeat breaches (3 or more in a calendar month for the same category) trigger a mandatory process review chaired by Rajesh Nair.
+
+EXCLUSIONS
+SLA timers are paused when: a ticket is in "Waiting for User" status, during approved maintenance windows, or when the issue is caused by a third-party vendor outage outside our control.

@@ -1,0 +1,37 @@
+Change Management Policy
+Document ID: POL-CHG-005
+Version: 1.5
+Last Updated: 2024-08-10
+Owner: IT Operations – Rajesh Nair
+
+PURPOSE
+All changes to production infrastructure, applications, and security configurations must follow this policy to prevent unplanned outages and maintain an auditable change history.
+
+CHANGE CATEGORIES
+
+Standard Change
+Definition: Pre-approved, low-risk, repeatable changes with a documented procedure. No CAB approval required.
+Examples: OS patching via approved patch schedule, routine certificate renewals, adding a standard user account.
+Process: Log the change in the CMDB before execution. Post a completion note within 1 hour of finishing.
+
+Normal Change
+Definition: Any change not classified as Standard or Emergency. Requires Change Advisory Board (CAB) review.
+Lead Time Required: Minimum 5 business days before the proposed change window.
+CAB Meeting: Every Tuesday at 3:00 PM IST. Chaired by Rajesh Nair.
+Process: Submit Change Request (CR) form in the ticketing system with: scope, rollback plan, impact assessment, and test results. CAB either approves, rejects, or requests more information.
+
+Emergency Change
+Definition: A change needed to resolve an active P1 or P2 incident where delay would worsen impact.
+Process: Verbal approval from Rajesh Nair is sufficient to proceed. A full CR must be submitted retrospectively within 24 hours. Emergency changes are reviewed in the next CAB meeting.
+Risk: Emergency changes account for the majority of change-related outages. Always document the rollback plan even under time pressure.
+
+MAINTENANCE WINDOWS
+Scheduled maintenance windows: Every Saturday 11:00 PM to Sunday 3:00 AM IST.
+Extended window (quarterly): Last Saturday of March, June, September, December — 10:00 PM to 6:00 AM IST.
+No changes outside these windows without CAB approval or Emergency Change designation.
+
+ROLLBACK POLICY
+Every change, including Standard changes, must have a rollback plan documented before execution. If a change cannot be rolled back (e.g. data migrations), this must be explicitly stated and approved by Rajesh Nair personally.
+
+CAB MEMBERS
+Rajesh Nair (Chair), Priya Sharma, Vikram Iyer, Deepak Rao, and one representative from the affected business unit.

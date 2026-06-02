@@ -1,0 +1,33 @@
+Runbook: Database Outage Response
+Document ID: RB-DB-003
+Version: 3.1
+Last Updated: 2024-12-01
+Owner: Platform Engineering – Vikram Iyer
+
+SCOPE
+This runbook applies to outages or severe degradation of any of the following production databases:
+- prod-mysql-01 (ERP and Order Management)
+- prod-postgres-02 (Customer Portal and Auth Service)
+- prod-mongo-03 (Logging and Analytics)
+
+SEVERITY CLASSIFICATION
+Full outage (0 connections accepted): Treat as P1 immediately.
+Partial outage (high latency > 5 seconds or >20% error rate): Treat as P2.
+Replica lag > 60 seconds: Treat as P3.
+
+INITIAL RESPONSE STEPS
+1. Confirm the outage using the Grafana dashboard (URL: http://monitor.internal/db-health). Check CPU, memory, active connections, and replication lag panels.
+2. SSH into the affected database host. Check process list and disk usage. Look for: disk full, OOM killer events (check /var/log/syslog), runaway queries, or connection pool exhaustion.
+3. Check the application error logs for the services connected to this database. Common first symptoms: "Too many connections" or "Connection refused."
+4. If disk is full: identify and archive old log files under /var/lib/mysql/logs/ or /var/log/postgresql/. Do NOT delete binary logs without approval from Vikram Iyer.
+5. If OOM: restart the database service only after confirming no active transactions. Use: sudo systemctl restart mysql (or postgresql/mongod as appropriate).
+6. If runaway query: identify the process ID from the process list, confirm with the owning team, then kill only if confirmed safe.
+
+ESCALATION
+If steps above do not restore service within 30 minutes: escalate to Tier 3 (Vikram Iyer or Nandita Kulkarni). If data integrity is at risk (corruption, unexpected data loss): immediately notify Rajesh Nair and do not restart services until reviewed.
+
+FAILOVER PROCEDURE
+prod-mysql-01 has a hot standby at prod-mysql-01-replica. Failover requires manual promotion. Contact Vikram Iyer before initiating. RTO for manual failover: approximately 12 minutes. RPO: up to 30 seconds of data loss possible.
+
+POST-INCIDENT
+All database P1 and P2 incidents require a Post-Incident Report within 24 hours. Template: PIR-TEMPLATE-001 on the internal wiki.

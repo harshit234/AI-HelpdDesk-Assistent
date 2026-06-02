@@ -1,0 +1,35 @@
+Security Incident Response Policy
+Document ID: POL-SEC-006
+Version: 2.1
+Last Updated: 2024-11-01
+Owner: IT Security – Nandita Kulkarni
+
+PURPOSE
+This policy defines how to identify, report, contain, and recover from security incidents including data breaches, ransomware, phishing attacks, and unauthorised access.
+
+WHAT QUALIFIES AS A SECURITY INCIDENT
+- Any confirmed or suspected unauthorised access to systems or data
+- Malware or ransomware detected on any company endpoint or server
+- Phishing attack where credentials were entered on a fraudulent site
+- Unusual bulk data export or exfiltration attempt
+- Any vulnerability exploited in production
+
+IMMEDIATE STEPS (FIRST 15 MINUTES)
+1. Do NOT attempt to remediate on your own. Contain first, fix later.
+2. Isolate the affected system: disconnect from network if possible (do not power off — this destroys forensic evidence).
+3. Report immediately to Nandita Kulkarni (ext. 3301) and Rajesh Nair (ext. 1001). Do not use email if you suspect email is compromised — use phone or Signal.
+4. Do NOT notify the affected user's broader team or post in general Slack channels. Information about security incidents must be on a need-to-know basis until assessed.
+5. Open a P1 ticket in the helpdesk system under category "Security" with subject "SECURITY INCIDENT – [brief description]." Mark it as restricted.
+
+CONTAINMENT
+Nandita Kulkarni leads containment. Steps depend on incident type:
+Ransomware: Immediately isolate all systems on the same VLAN. Verify backup integrity before any recovery attempt. Contact cyber insurance provider (policy number: HDFC-CYB-20241100) before paying any ransom.
+Phishing with credential entry: Force password reset for the affected account. Revoke all active sessions. Check audit logs for access in the past 48 hours.
+Unauthorised access: Revoke access immediately. Preserve logs — do not clear or rotate until forensic review is complete.
+
+NOTIFICATION REQUIREMENTS
+If personal data of customers or employees is involved: Legal and Compliance must be notified within 6 hours. CERT-In notification is required within 6 hours under the DPDP Act if the breach involves more than 500 individuals' data.
+External communication (press, customers): Only by the CEO or authorised spokesperson. IT must not communicate externally without approval.
+
+POST-INCIDENT
+Mandatory PIR within 48 hours for all security incidents. Nandita Kulkarni chairs the review. All findings and remediation steps are logged in the Security Register (restricted access).

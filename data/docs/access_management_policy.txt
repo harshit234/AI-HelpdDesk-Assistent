@@ -1,0 +1,26 @@
+Access Management Policy
+Document ID: POL-ACC-008
+Version: 2.0
+Last Updated: 2024-10-20
+Owner: IT Security – Nandita Kulkarni
+
+PURPOSE
+Governs how user accounts are created, modified, and revoked across all company systems. Applies to all employees, contractors, and third-party vendors.
+
+ACCOUNT PROVISIONING
+New Employee: IT receives the onboarding request from HR via the ticketing system, category "Access Request," at least 3 business days before the joining date. Standard accounts created: Active Directory, email (Google Workspace), VPN, and role-based application access as defined in the Access Matrix (ACC-MATRIX-V3, stored on the internal wiki).
+Contractor/Vendor: Requires approval from the department head AND Nandita Kulkarni. Contractor accounts are time-limited (maximum 90 days) and must be explicitly renewed. All contractor access is logged and reviewed monthly.
+
+PRIVILEGED ACCESS
+Admin-level access (server root, AD Domain Admin, database superuser) must be requested via a separate Privileged Access Request. Requires dual approval: the requester's manager and Vikram Iyer (for infrastructure) or Nandita Kulkarni (for security systems). Privileged accounts are reviewed quarterly; unused privileged accounts are revoked after 30 days of inactivity.
+
+PASSWORD POLICY
+Minimum length: 14 characters. Must include uppercase, lowercase, number, and special character. Expiry: 90 days for standard accounts, 60 days for privileged accounts. No reuse of last 12 passwords. Multi-Factor Authentication (MFA) is mandatory for all accounts with VPN access, all admin accounts, and all cloud console access (AWS, GCP).
+
+ACCOUNT SUSPENSION AND REVOCATION
+Resignation/Termination: HR must notify IT at least 24 hours before the employee's last day. All accounts are suspended (not deleted) on the last working day at 6:00 PM. Accounts are deleted after 30 days, unless Legal requires retention.
+Immediate Revocation: Required for any account involved in a security incident, or upon receipt of a written request from Rajesh Nair. Must be completed within 15 minutes of the request.
+Access Review: All accounts reviewed quarterly using the Access Review Checklist (ACC-REVIEW-Q). Department heads confirm which accounts are still required. Orphaned accounts (where the user has left) found during reviews are treated as a security incident.
+
+SHARED ACCOUNTS
+Shared accounts are prohibited except for monitored service accounts. All exceptions require written approval from Nandita Kulkarni and must be documented in the Shared Account Register.

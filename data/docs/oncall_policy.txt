@@ -1,0 +1,31 @@
+On-Call and After-Hours Support Policy
+Document ID: POL-ONC-012
+Version: 1.3
+Last Updated: 2024-11-20
+Owner: Helpdesk Manager – Priya Sharma
+
+PURPOSE
+Defines responsibilities, compensation, and escalation rules for engineers on the on-call rotation outside business hours (before 9:00 AM and after 9:00 PM IST on weekdays, and all day on Sundays and public holidays).
+
+ON-CALL EXPECTATIONS
+The on-call engineer must: keep their phone on at all times during their rotation, acknowledge PagerDuty alerts within 5 minutes, and begin active investigation within 15 minutes of acknowledgement.
+On-call engineers are not expected to resolve all issues alone. They must assess severity, apply immediate containment, and escalate appropriately. A response does not mean a resolution.
+
+WHO CAN BE PAGED OUT OF HOURS
+Only P1 and P2 alerts route to PagerDuty after hours. P3 and P4 tickets queue for the next business day.
+Exception: Any confirmed security incident is P1 regardless of apparent severity and pages immediately.
+
+ESCALATION FROM ON-CALL
+If the on-call engineer cannot resolve a P1 within 30 minutes: Page the backup on-call (always Vikram Iyer unless a swap has been registered). If Vikram Iyer is unavailable: call Rajesh Nair directly (ext. 1001, personal number in the secure on-call contacts sheet in Vault).
+
+ON-CALL ROTATION MEMBERS
+The rotation includes only engineers at L2 and above: Deepak Rao, Fatima Sheikh, Vikram Iyer, Nandita Kulkarni, Akash Patel (L2 qualified as of 2024-09-01). L1 analysts (Karan Mehta, Sneha Joshi) are not on the primary rotation but may be asked to assist during business hours incidents.
+
+SWAP POLICY
+On-call swaps are allowed but must be registered in the PagerDuty schedule at least 24 hours in advance. Verbal swaps not reflected in PagerDuty are not official — if PagerDuty pages you, you are responsible.
+
+COMPENSATION
+On-call standby allowance: Rs. 500 per weekday night, Rs. 1,000 per weekend day. If actually paged and working for more than 1 hour outside business hours: Rs. 750 per hour (capped at 8 hours per incident). Claims submitted via HR system within 5 business days of the incident. Approved by Priya Sharma, processed in the next payroll cycle.
+
+WELLNESS
+Engineers cannot be on-call for more than 2 consecutive weeks. After a P1 incident resolved between 10 PM and 6 AM, the engineer is entitled to a compensatory half-day the following day, approved automatically — no manager sign-off required. Document it in the attendance system.

@@ -1,0 +1,38 @@
+Runbook: Network Incident Response
+Document ID: RB-NET-004
+Version: 2.0
+Last Updated: 2024-09-20
+Owner: Systems Engineering – Deepak Rao
+
+SCOPE
+Covers incidents involving LAN/WAN connectivity, VPN, DNS, firewall, and load balancer failures in the Ahmedabad HQ office and the Mumbai co-location site.
+
+COMMON NETWORK INCIDENTS AND FIRST STEPS
+
+1. Total Office Connectivity Loss
+First check: Has the ISP link gone down? Log into the edge router via out-of-band console (console IP: 10.0.0.1, credentials in Vault under network/edge-router). Check interface status.
+If ISP down: Call ISP NOC — Airtel leased line NOC: 1800-XXX-XXXX. Our circuit ID: AIRT-GJ-009821.
+If ISP up: Check the core switch (SW-CORE-01) for spanning tree issues or broadcast storms.
+
+2. VPN Connectivity Failures (Remote Users)
+Check the VPN gateway health (Cisco ASA at vpn.internal). Confirm the gateway is accepting connections.
+Common causes: Certificate expiry (check monthly — next expiry: 2025-06-30), IKEv2 phase mismatch, or user-side firewall blocking UDP 500/4500.
+If certificate expired: Deepak Rao must renew; this cannot be delegated to L1.
+
+3. DNS Resolution Failures
+Primary DNS: 10.10.1.10 (bind9 on dns-primary). Secondary: 10.10.1.11.
+Check named service status on dns-primary. Check zone file last-modified timestamps for unexpected changes.
+If both DNS servers are unreachable: temporarily configure 8.8.8.8 as a fallback for critical systems only, and escalate immediately.
+
+4. Load Balancer Issues (HAProxy on lb-01 and lb-02)
+Check HAProxy stats page: http://lb-01.internal:8404/stats (login: admin / see Vault).
+If a backend pool shows all red: check if the application servers are up, not the load balancer.
+Failover from lb-01 to lb-02 is automatic via keepalived. If keepalived has split-brain, do NOT manually intervene — call Deepak Rao.
+
+ESCALATION
+Escalate to Tier 3 (Platform Engineering) if the issue involves the Mumbai co-location link, MPLS routing, or BGP configuration. These require vendor (Tata Communications) coordination.
+
+CONTACTS
+Airtel Leased Line NOC: 1800-XXX-XXXX | Circuit: AIRT-GJ-009821
+Tata Communications NOC: 1800-YYY-YYYY | Circuit: TATA-MH-007413
+Deepak Rao (on-call): ext. 2201

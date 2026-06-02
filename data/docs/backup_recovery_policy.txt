@@ -1,0 +1,38 @@
+Backup and Recovery Policy
+Document ID: POL-BAK-009
+Version: 1.9
+Last Updated: 2024-12-10
+Owner: Platform Engineering – Nandita Kulkarni
+
+PURPOSE
+Defines backup schedules, retention periods, storage locations, and recovery procedures for all production data and configurations.
+
+BACKUP SCHEDULE
+
+Production Databases
+prod-mysql-01: Full backup daily at 1:00 AM IST. Incremental every 6 hours. Retained for 30 days locally, 90 days in AWS S3 (bucket: prod-db-backup-gj). Binary logs retained for 7 days.
+prod-postgres-02: Full backup daily at 2:00 AM IST. WAL archiving enabled continuously. Retained 30 days locally, 90 days in S3.
+prod-mongo-03: Full backup daily at 3:00 AM IST. Retained 14 days locally, 60 days in S3.
+
+Application Servers
+Configuration files (/etc/ and application config dirs): Backed up daily to a Git repository (internal GitLab, repo: infra-configs). Changes are versioned; rollback is a git checkout.
+Application data volumes: Snapshot via AWS EBS snapshot daily. Retained 14 days.
+
+File Servers
+Department shared drives: Backed up nightly at 12:00 AM to a secondary NAS (NAS-02 at Mumbai site). Retained 90 days.
+
+RECOVERY TARGETS
+prod-mysql-01: RTO 4 hours, RPO 6 hours (matches incremental backup frequency).
+prod-postgres-02: RTO 2 hours, RPO 30 minutes (WAL archiving).
+prod-mongo-03: RTO 6 hours, RPO 24 hours.
+Application configs: RTO 30 minutes (git checkout).
+File server: RTO 8 hours, RPO 24 hours.
+
+BACKUP VERIFICATION
+Backups are not considered reliable until tested. Restore tests are performed monthly on a non-production environment. Results logged in the Backup Test Register (BAK-TEST-LOG). If a backup fails to restore successfully, it is treated as a P1 incident. Nandita Kulkarni reviews the Backup Test Register quarterly.
+
+OFFSITE AND ENCRYPTION
+All S3 backups are encrypted using AES-256 with KMS-managed keys. Backup S3 buckets are in ap-south-1 (Mumbai) region with versioning enabled and MFA delete required. The NAS-02 Mumbai backup is encrypted at rest using BitLocker.
+
+RESTORE REQUEST PROCESS
+All restore requests must be ticketed (category: "Backup and Restore"). Requester must specify: what data, from what point in time, and the business justification. Restores to production require approval from Vikram Iyer. Restores to non-production can be approved by any L2 engineer.

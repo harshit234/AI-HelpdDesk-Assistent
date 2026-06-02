@@ -1,0 +1,36 @@
+Patch Management Policy
+Document ID: POL-PAT-010
+Version: 1.4
+Last Updated: 2024-09-05
+Owner: Systems Engineering – Deepak Rao
+
+PURPOSE
+Defines the process for evaluating, testing, and applying OS and software patches to all company-managed systems to reduce vulnerability exposure.
+
+PATCH CLASSIFICATION
+
+Critical Security Patch (CVSS score 9.0–10.0)
+Must be applied within 72 hours of release, even outside the normal maintenance window.
+Requires Emergency Change designation. Verbal approval from Rajesh Nair required to proceed outside the Saturday window.
+Test in staging before production only if time permits; document the risk if staging is skipped.
+
+High Security Patch (CVSS 7.0–8.9)
+Must be applied within 14 days of release.
+Follows Normal Change process. Can wait for the next Saturday maintenance window if within the 14-day deadline.
+
+Medium and Low Patches (CVSS below 7.0)
+Applied during the monthly patch cycle (first Saturday of each month, within the regular maintenance window).
+Grouped into a single change request covering all Medium/Low patches for that month.
+
+PATCHING PROCESS
+1. Deepak Rao reviews the monthly vendor advisories (Microsoft Patch Tuesday, Ubuntu Security Notices, Red Hat Errata) on the first Monday of each month.
+2. Patches are tested on the staging environment (staging-app-01, staging-db-01) for at minimum 48 hours before production.
+3. Production patching follows the order: non-critical servers first, then critical servers (databases, auth, payment gateway last).
+4. After patching, run the post-patch checklist: verify service health, check application logs for errors, confirm monitoring alerts are not firing.
+5. Document the patch applied, the CVE(s) addressed, and the result in the CMDB.
+
+EXCEPTIONS
+Any system that cannot be patched within the required timeline (e.g. due to application compatibility) must have a compensating control documented and approved by Nandita Kulkarni. Unpatched critical vulnerabilities with no compensating control are escalated to Rajesh Nair.
+
+ENDPOINT PATCHING
+Employee laptops are patched via the MDM solution (Jamf for Mac, Intune for Windows). Patch compliance is reviewed monthly. Endpoints with > 30-day-old critical patches are flagged and the user's manager is notified.

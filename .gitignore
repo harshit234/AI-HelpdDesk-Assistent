@@ -1,0 +1,49 @@
+# ==============================================================
+# IT HelpDesk Assistant — .gitignore
+# ==============================================================
+
+# Environment secrets
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+*.spec
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Pytest / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+*.log
+
+# Generated output and traces (keep .gitkeep only)
+output/*
+!output/.gitkeep
+traces/*
+!traces/.gitkeep
+demo/*
+!demo/.gitkeep
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# MCP
+.mcp.json
