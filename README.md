@@ -61,8 +61,8 @@ The MCP server runs as a subprocess. The crew connects to it via `MCPServerAdapt
 |---|---|---|
 | Python | 3.11 or 3.12 (⚠️ see note) | — |
 | pip | latest | — |
-| Ollama | latest — [install](https://ollama.com) | ✅ Installed |
-| Node.js (for MCP Inspector) | 18+ | ✅ Installed (v24.16.0 LTS) |
+| Ollama | latest — [install](https://ollama.com) |
+| Node.js (for MCP Inspector)|
 
 > ⚠️ **Python 3.14 Note:** The CrewAI integration tests (`test_crew.py`) are automatically skipped on Python 3.14+ due to an upstream incompatibility between Pydantic V1 and Python 3.14 (via `chromadb`). The MCP server tools (`test_tools.py`) work fully on all Python versions.
 
@@ -275,15 +275,15 @@ AI-HelpdDesk-Assistent/
 
 Covers: database outages, network incidents, security events, patch management, access requests, vendor issues, change requests — spanning P1 through P4.
 
----
+## Safety & Security
 
-## Safety notes
-
-- The MCP server runs as a local subprocess over stdio. Only connect to servers you trust.
-- All tool inputs are validated with strict schemas before any file I/O.
-- `max_iter` is set on every agent to prevent runaway loops.
-- The `MCPServerAdapter` is always used as a context manager so the subprocess is properly closed.
-- No secrets, API keys, or private data are committed. `.env` is gitignored.
+- **Indirect Prompt Injection Protection (RAG Defense):**
+  - **Tool-Level Scanner:** The `search_documents` tool dynamically scans matched documents for known injection keywords (e.g., "ignore all previous instructions", "system override"). If a threat is detected, it logs a stderr warning `[SECURITY WARNING]`, flags the metadata, and prepends a clear security warning header to the document snippet before it reaches the agent.
+  - **Agent Prompt Hardening:** Researcher, Writer, and Verifier agent goal and backstory prompts have been hardened to treat external documents as untrusted data, prioritize system prompt instructions, and ignore any embedded overrides or system instructions.
+- **Input Validation:** All tool inputs are validated with strict schemas before any file I/O (e.g., query length, ticket ID pattern checking). No Python stack traces are leaked on invalid inputs.
+- **Agent Limits:** `max_iter` is set to `8` on every agent to prevent runaway loops. Agent delegation is disabled (`allow_delegation=False`) to keep the pipeline sequential and predictable.
+- **Subprocess Isolation:** The MCP server runs as a local subprocess over stdio. The `MCPServerAdapter` is used as a context manager to ensure proper process lifecycle management and cleanup.
+- **Environment Secrets:** No secrets, API keys, or private data are committed. `.env` is gitignored.
 
 ---
 

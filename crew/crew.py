@@ -23,7 +23,7 @@ from datetime import datetime
 from pathlib import Path
 
 from crewai import Crew, Process
-from crewai.mcp import MCPServerAdapter
+from crewai_tools import MCPServerAdapter
 from mcp import StdioServerParameters
 
 from crew.agents import make_researcher, make_verifier, make_writer
@@ -34,6 +34,7 @@ from crew.tasks import make_research_task, make_verify_task, make_write_task
 # ---------------------------------------------------------------------------
 _ROOT = Path(__file__).parent.parent
 _TRACES_DIR = _ROOT / "traces"
+_OUTPUT_DIR = _ROOT / "output"
 _SERVER_SCRIPT = _ROOT / "server" / "mcp_server.py"
 
 
@@ -90,8 +91,13 @@ def run_crew(question: str) -> str:
 
         # Build tasks (chained context)
         research_task = make_research_task(question, researcher)
-        write_task = make_write_task(writer, context_tasks=[research_task])
-        verify_task = make_verify_task(verifier, context_tasks=[write_task])
+        write_task = make_write_task(question, writer, context_tasks=[research_task])
+        verify_task = make_verify_task(question, verifier, context_tasks=[write_task])
+
+        # Set output log path in traces/
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        _TRACES_DIR.mkdir(parents=True, exist_ok=True)
+        log_path = _TRACES_DIR / f"crew_run_{timestamp}.log"
 
         # Assemble crew
         crew = Crew(
@@ -99,9 +105,31 @@ def run_crew(question: str) -> str:
             tasks=[research_task, write_task, verify_task],
             process=Process.sequential,
             verbose=True,
+            output_log_file=str(log_path),
         )
 
         result = crew.kickoff()
+
+        # ------------------------------------------------------------------
+        # Fallback: if the Writer agent did not actually call save_report
+        # (common with local models that embed tool calls as text instead
+        # of executing them), persist the report from the task output.
+        # ------------------------------------------------------------------
+        _OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+        md_files = list(_OUTPUT_DIR.glob("*.md"))
+        if not md_files:
+            writer_output = str(write_task.output) if write_task.output else ""
+            if writer_output.strip():
+                from server.mcp_server import save_report as _save_report
+
+                # Try to extract a clean title from the output
+                title = "crew_report"
+                for line in writer_output.splitlines():
+                    stripped = line.strip().lstrip("#").strip()
+                    if stripped:
+                        title = stripped[:80]
+                        break
+                _save_report(title=title, content=writer_output)
 
     # Persist trace
     _save_trace(question, str(result))
@@ -126,7 +154,7 @@ def _save_trace(question: str, result: str) -> None:
     trace_path.write_text(
         json.dumps(trace_data, indent=2, ensure_ascii=False), encoding="utf-8"
     )
-    print(f"\n[trace saved → {trace_path}]")
+    print(f"\n[trace saved -> {trace_path}]")
 
 
 # ---------------------------------------------------------------------------

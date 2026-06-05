@@ -28,6 +28,7 @@ def make_research_task(question: str, agent) -> Task:
     """
     return Task(
         description=(
+            "you MUST use search_documents before providing any answer\n\n"
             f"Answer the following business question using the available tools:\n\n"
             f"QUESTION: {question}\n\n"
             "Steps to follow:\n"
@@ -44,20 +45,26 @@ def make_research_task(question: str, agent) -> Task:
             "- [TICK-NNN]: <status, priority, description, resolution notes>\n"
             "### Gaps\n"
             "- List anything the question asks for that you could not find evidence of.\n\n"
-            "IMPORTANT: Do not infer or invent. Only report what the tools returned."
+            "IMPORTANT: You MUST use the search_documents tool to search documents "
+            "and read_record to retrieve ticket details. Do not answer from memory. "
+            "Do not infer or invent. Only report what the tools returned. "
+            "Specifically, you MUST use search_documents before providing any answer."
         ),
         expected_output=(
-            "A structured evidence summary in markdown with clearly attributed "
-            "quotes from documents and ticket data. All sources named explicitly."
+            "A structured markdown evidence summary containing '## Evidence Summary', "
+            "'### Documents Found', '### Tickets Found', and '### Gaps' sections. "
+            "It must only contain facts retrieved using the tools, with explicit filenames and ticket IDs cited. "
+            "No fabricated or assumed information is allowed."
         ),
         agent=agent,
     )
 
 
-def make_write_task(agent, context_tasks: list[Task]) -> Task:
+def make_write_task(question: str, agent, context_tasks: list[Task]) -> Task:
     """Instruct the Writer to produce a sourced report from Researcher output.
 
     Args:
+        question:       The original business question.
         agent:          The Writer Agent instance.
         context_tasks:  List containing the research Task (provides context).
 
@@ -66,39 +73,56 @@ def make_write_task(agent, context_tasks: list[Task]) -> Task:
     """
     return Task(
         description=(
-            "You have received an evidence summary from the Researcher. "
-            "Write a clear, structured markdown report that directly answers "
-            "the original question.\n\n"
+            f"You have received an evidence summary from the Researcher for the original question:\n"
+            f"QUESTION: {question}\n\n"
+            "Write a clear, structured markdown report that directly answers this question.\n\n"
             "Report structure:\n"
             "# Report: <question in title case>\n"
             "## Summary\n"
             "One paragraph directly answering the question.\n"
             "## Evidence\n"
-            "Detailed findings with inline citations after every fact, "
-            "e.g. 'P1 tickets must be resolved within 4 hours [sla_policy.txt]' "
-            "or 'TICK-021 status is Open [TICK-021]'.\n"
+            "Detailed findings with inline citations after every fact.\n"
             "## Recommendations\n"
             "Actionable next steps (only if evidence supports them).\n"
             "## Sources\n"
             "Bulleted list of all documents and ticket IDs referenced.\n\n"
-            "After writing the report, call save_report to persist it. "
-            "Provide the report title (e.g., 'IT SLA Report') and the full content as arguments.\n\n"
+            "CITATION FORMAT (mandatory):\n"
+            "Every factual statement derived from a retrieved document or ticket "
+            "MUST include an inline citation in square brackets immediately after "
+            "the fact. Use exactly these formats:\n"
+            "- For documents: [filename.txt]  e.g. 'P1 must be resolved within "
+            "4 hours [sla_policy.txt]'\n"
+            "- For tickets:   [TICK-NNN]      e.g. 'TICK-021 status is Open "
+            "[TICK-021]'\n"
+            "Do NOT use other citation styles such as (Source: ...) or "
+            "(ref: ...). Only the [filename.txt] and [TICK-NNN] formats are "
+            "acceptable.\n\n"
+            "You MUST call the save_report tool to persist the report. "
+            "Do not simply return the report text. "
+            "The task is considered complete only after save_report has been "
+            "successfully called and has returned a confirmation containing "
+            "the saved file path.\n\n"
+            "Provide the report title (e.g., 'IT SLA Report') and the full "
+            "markdown content as the two arguments to save_report. "
+            "Your final answer MUST be the absolute file path returned by "
+            "the save_report tool.\n\n"
             "IMPORTANT: Do not include any fact not present in the evidence summary."
         ),
         expected_output=(
-            "A complete markdown report saved to output/report.md. "
-            "Every factual statement has an inline citation. "
-            "The Sources section lists all referenced documents and tickets."
+            "A confirmation message from the save_report tool containing the "
+            "absolute file path where the report was saved "
+            "(e.g. 'C:/Users/.../output/it_sla_report.md')."
         ),
         agent=agent,
         context=context_tasks,
     )
 
 
-def make_verify_task(agent, context_tasks: list[Task]) -> Task:
+def make_verify_task(question: str, agent, context_tasks: list[Task]) -> Task:
     """Instruct the Verifier to audit the Writer's report claim by claim.
 
     Args:
+        question:       The original business question.
         agent:          The Verifier Agent instance.
         context_tasks:  List containing the write Task (provides context).
 
@@ -107,8 +131,10 @@ def make_verify_task(agent, context_tasks: list[Task]) -> Task:
     """
     return Task(
         description=(
-            "You have received the final report from the Writer. "
-            "Your job is to verify every factual claim against the original sources.\n\n"
+            "you MUST use search_documents before providing any answer\n\n"
+            f"You have received the final report from the Writer for the original question:\n"
+            f"QUESTION: {question}\n\n"
+            "Your job is to verify every factual claim in the report against the original sources.\n\n"
             "Steps:\n"
             "1. Read through the report carefully.\n"
             "2. For each claim that cites a document, use search_documents to "
@@ -129,12 +155,20 @@ def make_verify_task(agent, context_tasks: list[Task]) -> Task:
             "PASS — all claims verified\n"
             "OR\n"
             "FAIL — N claims flagged (list them)\n\n"
-            "IMPORTANT: If you cannot retrieve a cited source, mark the claim as FLAG."
+            "TERMINOLOGY REQUIREMENT: When referring to service level agreements, "
+            "response time commitments, or resolution time commitments, you MUST "
+            "use the exact term 'SLA'. Do not replace it with synonyms such as "
+            "'service commitment', 'response target', or 'support obligation'.\n\n"
+            "IMPORTANT: If you cannot retrieve a cited source, mark the claim as FLAG. "
+            "You MUST use the search_documents or read_record tool to retrieve the sources and verify each claim before providing any answer."
         ),
         expected_output=(
-            "A verification report in markdown table format. "
-            "Every claim is audited with a VERIFIED or FLAG verdict. "
-            "An overall PASS or FAIL verdict is given at the end."
+            "A verification report in markdown format that explicitly references "
+            "the applicable SLA requirements. It must contain: 1) A '## Verification Report' header, "
+            "2) A '### Claim-by-Claim Audit' section with a markdown table containing Claim, Source, Verdict, "
+            "and Notes columns, auditing every single statement in the report, and 3) An '### Overall Verdict' "
+            "concluding with either 'PASS — all claims verified' or 'FAIL — N claims flagged'. "
+            "The term 'SLA' must appear at least once when discussing response or resolution commitments."
         ),
         agent=agent,
         context=context_tasks,
