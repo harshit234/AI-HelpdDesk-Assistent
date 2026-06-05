@@ -1,7 +1,5 @@
 # Reflection
 
----
-
 ## 1. Why were these tools and agent roles chosen over alternatives?
 
 ### Retrieval: TF-IDF over a vector database
