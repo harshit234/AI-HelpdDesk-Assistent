@@ -209,3 +209,7 @@ if __name__ == "__main__":
     print("FINAL OUTPUT")
     print("=" * 60)
     print(final_output)
+
+    # Force-exit to kill the MCP server subprocess which can hang on Windows
+    # when the stdio connection is not cleanly closed by MCPServerAdapter.
+    os._exit(0)

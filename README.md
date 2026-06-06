@@ -4,6 +4,12 @@ A multi-agent operations assistant that answers business questions by searching 
 
 ---
 
+## 🎬 Demo
+
+▶️ [Watch the demo on Google Drive](https://drive.google.com/file/d/1u0-NiUX55RpiK-gDUBuYTWnYAX2QED6p/view?usp=sharing)
+
+---
+
 ## What it does
 
 You ask a business question. The crew:
