@@ -13,7 +13,7 @@ A multi-agent operations assistant that answers business questions by searching 
 ## What it does
 
 You ask a business question. The crew:
-1. **Researcher** — reads the `docs://index` resource to discover available documents, searches policy documents and reads ticket records using MCP tools
+1. **Researcher** — reads the resource document to discover available documents, searches policy documents and reads ticket records using MCP tools
 2. **Writer** — synthesises findings into a structured markdown report with citations, saved via `save_report`
 3. **Verifier** — checks every claim in the report against the retrieved evidence and flags anything unsupported
 
@@ -65,7 +65,7 @@ The MCP server runs as a subprocess. The crew connects to it via `MCPServerAdapt
 
 | Requirement | Version | Status |
 |---|---|---|
-| Python | 3.11 or 3.12 (⚠️ see note) | — |
+| Python | 3.11 or 3.12  | — |
 | pip | latest | — |
 | Ollama | latest — [install](https://ollama.com) |
 | Node.js (for MCP Inspector)|
@@ -156,17 +156,17 @@ Open `http://localhost:5173` in your browser. You should see:
 
 | Tool | Input | Response |
 |---|---|---|
-| `search_documents` | `query="SLA"` | ✅ Matching docs with scores and snippets |
-| `search_documents` | `query=""` | ✅ `{"error": "query must not be empty"}` |
-| `search_documents` | `query="nonexistent"` | ✅ `{"message": "No matching documents found."}` |
-| `search_documents` | 501 char query | ✅ `{"error": "query must not exceed 500 characters"}` |
-| `read_record` | `id="TICK-001"` | ✅ Full ticket dict |
-| `read_record` | `id=""` | ✅ `{"error": "id must not be empty"}` |
-| `read_record` | `id="TICK-999"` | ✅ `{"error": "Ticket 'TICK-999' not found in records"}` |
-| `read_record` | `id="ABC-123"` | ✅ `{"error": "Invalid ticket ID format..."}` |
-| `save_report` | `title="Test Report"` + content | ✅ Returns absolute path to saved `.md` |
-| `save_report` | `title=""` | ✅ `Error: title must not be empty` |
-| `save_report` | `content=""` | ✅ `Error: content must not be empty` |
+| `search_documents` | `query="SLA"` | Matching docs with scores and snippets |
+| `search_documents` | `query=""` | `{"error": "query must not be empty"}` |
+| `search_documents` | `query="nonexistent"` | `{"message": "No matching documents found."}` |
+| `search_documents` | 501 char query | `{"error": "query must not exceed 500 characters"}` |
+| `read_record` | `id="TICK-001"` | Full ticket dict |
+| `read_record` | `id=""` | `{"error": "id must not be empty"}` |
+| `read_record` | `id="TICK-999"` | `{"error": "Ticket 'TICK-999' not found in records"}` |
+| `read_record` | `id="ABC-123"` | `{"error": "Invalid ticket ID format..."}` |
+| `save_report` | `title="Test Report"` + content | Returns absolute path to saved `.md` |
+| `save_report` | `title=""` | Error: title must not be empty` |
+| `save_report` | `content=""` | Error: content must not be empty` |
 
 ---
 
